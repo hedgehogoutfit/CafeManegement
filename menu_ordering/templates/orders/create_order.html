@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create order</title>
+</head>
+<body>
+<form method="POST">
+    {% csrf_token %}
+    <label>
+    table number <input type="number" name="table_number" required>
+    </label>
+<div id="dishes">
+{% for obj in objects %}
+
+    <ul>
+    <li>
+    <label for="{{ obj.dish_name }}">{{ obj.dish_name }} - ${{ obj.price }} quantity</label>
+    <input type="number" id="{{ obj.dish_name }}" name="{{ obj.dish_id }}" value="1">
+    </li>
+    </ul>
+
+{% endfor %}
+ </div>
+<button type="submit">Confirm Order</button>
+</form>
+</body>
+</html>

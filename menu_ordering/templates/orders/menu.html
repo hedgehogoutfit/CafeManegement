@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Menu</title>
+</head>
+<body>
+    <h1>Menu</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <ul>
+            {% for item in menu_items %}
+            <li>
+                <label>
+                    <input type="checkbox" name="dish_ids" value="{{ item.dish_id }}">
+                    {{ item.dish_name }} - ${{ item.price }}
+                </label>
+            </li>
+            {% endfor %}
+        </ul>
+        <button type="submit">Create Order</button>
+    </form>
+</body>
+</html>

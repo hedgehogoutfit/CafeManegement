@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details</title>
+</head>
+<body>
+    <h1>Order Details - {{ order.order_id }}</h1>
+    <p>Table Number: {{ order.table_number }}</p>
+    <p>Status: {{ order.status }}</p>
+    <p>Total Price: {{ order.total_price }}</p>
+    <p>Created At: {{ order.created_at }}</p>
+
+    <h2>Dish Details</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Dish Name</th>
+                <th>Price Per Unit</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in order_items %}
+            <tr>
+                <td>{{ order.dish.dish_name }}</td>
+                <td>{{ order.dish.price }}</td>
+                <td>{{ order.quantity }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">No dishes in this order</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+<form
+    method="post"
+    action="{% url 'delete_order' order.order_id %}"
+  >
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Delete</button>
+  </form>
+</body>
+</html>
