@@ -1,0 +1,6 @@
+env/
+.idea/
+db.sqlite3
+me_shell.ipynb
+TODO
+menu_ordering/migrations/
