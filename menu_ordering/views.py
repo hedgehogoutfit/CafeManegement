@@ -1,9 +1,12 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, reverse
 from .models import Menu, Order, OrdersMenu
+from typing import List
 
-def index(request):
-    return HttpResponse("Here are menu_ordering!")
+def all_orders(request):
+
+    orders = Order.objects.all()
+    return render(request, 'orders/all_orders.html', {'orders': orders})
 
 def order_detail(request, order_id):
     order = Order.objects.get(order_id=order_id)
@@ -15,6 +18,8 @@ def order_detail(request, order_id):
     })
 
 def place_order(request):
+    """Choose items from menu"""
+
     if request.method == "POST":
         menu_ids = request.POST.getlist('dish_ids')
 
@@ -23,7 +28,7 @@ def place_order(request):
     menu_items = Menu.objects.all()
     return render(request, 'orders/menu.html', {'menu_items': menu_items})
 
-def create_order(request, menu_ids):
+def create_order(request, menu_ids: str):
     menu_ids_list = menu_ids.split(',')
     objects = Menu.objects.filter(dish_id__in=menu_ids_list)
 
@@ -38,18 +43,14 @@ def create_order(request, menu_ids):
                 pass
         order.save()
         # todo flash massage
-        return redirect("orders/order_detail", order_id=1)
+        return redirect("detail", order_id=order.order_id)
     return render(request, 'orders/create_order.html', {'objects': objects})
 
 def delete_order(request, order_id):
     Order.objects.filter(order_id=order_id).delete()
     return HttpResponse("Delete an order!")
 
-def all_orders(request):
-    """Веб-страница с таблицей всех заказов, отображающая их ID, номер стола, список блюд, общую стоимость и статус.
-    with links
-"""
-    return HttpResponse("All menu_ordering!")
+
 
 def change_status(request, order_id):
     """Пользователь через интерфейс выбирает заказ по ID и изменяет его статус (“в ожидании”, “готово”, “оплачено”).

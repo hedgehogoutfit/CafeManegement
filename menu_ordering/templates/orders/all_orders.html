@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All</title>
+</head>
+<body>
+<h1 style="text-align:center;">All orders</h1>
+{% for order in orders %}
+   Order id: {{ order.order_id }}
+   Table # {{ order.table_number }}
+   total price: {{ order.total_price }}$
+   Status: {{ order.status }}
+    <a href="{% url 'detail' order.order_id %}">Details</a>
+    <hr>
+{% endfor %}
+
+</body>
+</html>
