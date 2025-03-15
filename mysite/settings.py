@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'crispy_bootstrap5',
     'menu_ordering.apps.OrdersConfig',
     'django.contrib.admin',
     'django.contrib.auth',

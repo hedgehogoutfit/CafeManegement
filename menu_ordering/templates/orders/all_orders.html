@@ -1,19 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>All</title>
-</head>
-<body>
-<h1 style="text-align:center;">All orders</h1>
-{% for order in orders %}
+{% extends 'orders/base.html' %}
+
+{% block title %} All Orders {% endblock %}
+{% block content %}
+
+<br>
+
+<h1>All orders</h1>
+
+{% for order in order_list %}
+    <div>
    Order id: {{ order.order_id }}
    Table # {{ order.table_number }}
    total price: {{ order.total_price }}$
    Status: {{ order.status }}
-    <a href="{% url 'detail' order.order_id %}">Details</a>
+    <a href="{% url 'order_detail' order.order_id %}">Details</a>
     <hr>
+    </div>
 {% endfor %}
+ <div>
+        <a href="count/">Count the profit</a>
+    </div>
+{% endblock content %}
 
-</body>
-</html>

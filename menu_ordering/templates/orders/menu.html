@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Menu</title>
-</head>
-<body>
+{% extends 'orders/base.html' %}
+
+{% block title %} Menu {% endblock title %}
+
+{% block content %}
     <h1>Menu</h1>
     <form method="POST">
         {% csrf_token %}
@@ -19,5 +18,4 @@
         </ul>
         <button type="submit">Create Order</button>
     </form>
-</body>
-</html>
+{% endblock content %}

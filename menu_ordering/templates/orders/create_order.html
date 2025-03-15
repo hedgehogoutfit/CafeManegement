@@ -1,28 +1,77 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Create order</title>
-</head>
-<body>
+{% extends 'orders/base.html' %}
+
+{% block title %} Create {% endblock title %}
+
+{% block content %}
 <form method="POST">
     {% csrf_token %}
+    {{ form }}
+
     <label>
-    table number <input type="number" name="table_number" required>
+        Table number <input type="number" name="table_number" required>
     </label>
-<div id="dishes">
-{% for obj in objects %}
+    <br> <br>
 
-    <ul>
-    <li>
-    <label for="{{ obj.dish_name }}">{{ obj.dish_name }} - ${{ obj.price }} quantity</label>
-    <input type="number" id="{{ obj.dish_name }}" name="{{ obj.dish_id }}" value="1">
-    </li>
-    </ul>
+    {% for obj in objects %}
+    <div class="menu-item">
+        <label>
+            {{ obj.dish_name }} - ${{ obj.price }} quantity
+            <input type="checkbox" name="menu_item" value="{{ obj.dish_id }},1" class="dish-checkbox" data-price="{{ obj.price }}">
+            <input type="number" value="1" min="1" class="dish-quantity" disabled>
+        </label>
+    </div>
+    <br>
+    {% endfor %}
 
-{% endfor %}
- </div>
-<button type="submit">Confirm Order</button>
+    <h3>Total Price: $<span id="total-price">0</span></h3>
+    <br>
+
+    <button type="submit">Confirm Order</button>
 </form>
-</body>
-</html>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    function calculateTotal() {
+        let total = 0;
+
+        document.querySelectorAll(".dish-checkbox").forEach(function(checkbox) {
+            if (checkbox.checked) {
+                let price = parseFloat(checkbox.dataset.price);
+                let quantity = parseInt(checkbox.closest(".menu-item").querySelector(".dish-quantity").value);
+
+                console.log("Dish price:", price, "Quantity:", quantity); // Debugging
+
+                if (!isNaN(price) && !isNaN(quantity)) {
+                    total += price * quantity;
+                } else {
+                    console.error("Invalid price or quantity detected!");
+                }
+            }
+        });
+
+        console.log("Total price calculated:", total); // Debugging
+        document.getElementById("total-price").textContent = total.toFixed(2);
+    }
+
+    document.querySelectorAll(".dish-checkbox").forEach(function(checkbox) {
+        let quantityInput = checkbox.closest(".menu-item").querySelector(".dish-quantity");
+
+        checkbox.addEventListener("change", function() {
+            quantityInput.disabled = !this.checked;
+            if (this.checked) {
+                this.value = `${this.value.split(',')[0]},${quantityInput.value}`;
+            }
+            calculateTotal();
+        });
+
+        quantityInput.addEventListener("input", function() {
+            if (checkbox.checked) {
+                checkbox.value = `${checkbox.value.split(',')[0]},${this.value}`;
+            }
+            calculateTotal();
+        });
+    });
+});
+</script>
+
+{% endblock content %}

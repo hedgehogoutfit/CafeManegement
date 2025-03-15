@@ -16,8 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import RedirectView
+from django.shortcuts import reverse
 
 urlpatterns = [
+    path('', RedirectView.as_view(pattern_name='all_orders', permanent=False), name='index'),
     path("orders/", include("menu_ordering.urls")),
     path('admin/', admin.site.urls),
 ]
